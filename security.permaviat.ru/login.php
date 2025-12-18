@@ -1,9 +1,11 @@
 <?php
-	session_start();
-	include("./settings/connect_datebase.php");
-	
-	if (isset($_SESSION['user'])) {
-		include("./check_session.php");
+session_start();
+include("./settings/connect_datebase.php");
+
+//если пользователь уже авторизован, перенаправляем на нужную страницу
+if (isset($_SESSION['user'])) {
+
+    include("./check_session.php");
     if(checkActiveSession($mysqli)) {
         $user_query = $mysqli->query("SELECT `roll` FROM `users` WHERE `id` = ".$_SESSION['user']);
         $user_read = $user_query->fetch_assoc();
@@ -17,7 +19,7 @@
     } else {
         logoutUser($mysqli);
     }
- 	}
+}
 ?>
 <html>
 	<head> 
@@ -32,7 +34,7 @@
 			<a href=#><img src = "img/logo1.png"/></a>
 			<div class="name">
 				<a href="index.php">
-					<div class="subname">БЕЗОПАСНОСТЬ  ВЕБ-ПРИЛОЖЕНИЙ</div>
+					<div class="subname">БЗОПАСНОСТЬ  ВЕБ-ПРИЛОЖЕНИЙ</div>
 					Пермский авиационный техникум им. А. Д. Швецова
 				</a>
 			</div>
@@ -69,7 +71,7 @@
 				
 				var _login = document.getElementsByName("_login")[0].value;
 				var _password = document.getElementsByName("_password")[0].value;
-
+				
 				if(_login == "" || _password == "") {
 					alert("Заполните все поля");
 					return;

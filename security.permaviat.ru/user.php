@@ -5,8 +5,8 @@ include("./check_session.php");
 
 //проверяем активную сессию
 if(!checkActiveSession($mysqli)) {
-    // Вместо вызова logout() — просто редирект
-    header("Location: logout.php");
+    logout($mysqli);
+    header("Location: login.php");
     exit();
 }
 
