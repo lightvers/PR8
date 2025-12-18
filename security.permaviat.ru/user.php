@@ -1,19 +1,24 @@
 <?php
-	session_start();
-	include("./settings/connect_datebase.php");
-	
-	if (isset($_SESSION['user'])) {
-		if($_SESSION['user'] == -1) {
-			header("Location: login.php");
-		} else {
-			// проверяем пользователя, если админ выкидываем на админа
-			$user_to_query = $mysqli->query("SELECT `roll` FROM `users` WHERE `id` = ".$_SESSION['user']);
-			$user_to_read = $user_to_query->fetch_row();
-			
-			if($user_to_read[0] == 1) header("Location: login.php");
-		}
- 	} else header("Location: login.php");
-	
+session_start();
+include("./settings/connect_datebase.php");
+include("./check_session.php");
+
+//проверяем активную сессию
+if(!checkActiveSession($mysqli)) {
+    logout($mysqli);
+    header("Location: login.php");
+    exit();
+}
+
+//проверяем роль пользователя
+$user_query = $mysqli->query("SELECT `roll` FROM `users` WHERE `id` = ".$_SESSION['user']);
+$user_read = $user_query->fetch_assoc();
+
+//если админ - перенаправляем на админку
+if($user_read['roll'] == 1) {
+    header("Location: admin.php");
+    exit();
+}
 ?>
 <!DOCTYPE HTML>
 <html>
@@ -54,7 +59,25 @@
 						echo $user_to_read[0];
 					?>
 				</div>
-			
+				<div class="session-info" style="margin-top: 20px;">
+					<?php
+					$password_info = $mysqli->query("SELECT `password_changed_at` FROM `users` WHERE `id` = ".$_SESSION['user']);
+					$password_data = $password_info->fetch_assoc();
+					
+					$changed_date = new DateTime($password_data['password_changed_at']);
+					$current_date = new DateTime();
+					$interval = $changed_date->diff($current_date);
+					$days_left = 1 - $interval->days; 
+					
+					echo '<p><strong>Пароль изменен:</strong> ' . $password_data['password_changed_at'] . '</p>';
+					echo '<p><strong>Дней с момента изменения:</strong> ' . $interval->days . '</p>';
+					echo '<p><strong>До истечения пароля:</strong> ' . $days_left . ' дней</p>';
+					
+					if($days_left <= 7) {
+						echo '<p style="color: orange;"><strong>Внимание!</strong> Пароль скоро истечет. Рекомендуем сменить пароль.</p>';
+					}
+					?>
+				</div>
 				<div class="footer">
 					© КГАПОУ "Авиатехникум", 2020
 					<a href=#>Конфиденциальность</a>

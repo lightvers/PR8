@@ -40,9 +40,9 @@
 					<div class = "sub-name">Логин:</div>
 					<input name="_login" type="text" placeholder="" onkeypress="return PressToEnter(event)"/>
 					<div class = "sub-name">Пароль:</div>
-					<input name="_password" type="password" placeholder="" onkeypress="return PressToEnter(event)"/>
+					<input name="_password" type="text" placeholder="" onkeypress="return PressToEnter(event)"/>
 					<div class = "sub-name">Повторите пароль:</div>
-					<input name="_passwordCopy" type="password" placeholder="" onkeypress="return PressToEnter(event)"/>
+					<input name="_passwordCopy" type="text" placeholder="" onkeypress="return PressToEnter(event)"/>
 					
 					<a href="login.php">Вернуться</a>
 					<input type="button" class="button" value="Зайти" onclick="RegIn()" style="margin-top: 0px;"/>
@@ -87,7 +87,7 @@
 							var data = new FormData();
 							data.append("login", _login);
 							data.append("password", _password);
-
+							
 							// AJAX запрос
 							$.ajax({
 								url         : 'ajax/regin_user.php',
@@ -119,13 +119,14 @@
 									button.className = "button";
 								}
 							});
-						} else alert("Пароли не совпадают.");
-					
-						function CheckPassword(value){
+						} else alert("Пароли не совподают.");
+					}
+
+					function CheckPassword(value){
 						let regex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[\W_])[A-Za-z\d\W_]{8,}$/;
 						return regex.test(value);
 					}
-								
+			
 			function PressToEnter(e) {
 				if (e.keyCode == 13) {
 					var _login = document.getElementsByName("_login")[0].value;
