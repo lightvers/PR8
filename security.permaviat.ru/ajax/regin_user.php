@@ -20,11 +20,29 @@ if($user_read = $query_user->fetch_row()) {
     $mysqli->query("INSERT INTO `users`(`login`, `password`, `roll`, `password_changed_at`) 
                     VALUES ('".$mysqli->real_escape_string($login)."', '".$mysqli->real_escape_string($password)."', 0, '".$current_time."')");
     
-    $query_user = $mysqli->query("SELECT * FROM `users` WHERE `login`='".$mysqli->real_escape_string($login)."' AND `password`= '".$mysqli->real_escape_string($password)."';");
+    $query_user = $mysqli->query("SELECT * FROM `users` WHERE `login`='".$mysqli->real_escape_string($login)."'");
     $user_new = $query_user->fetch_row();
     $id = $user_new[0];
+    
+    if($id != -1) {
+        // Генерируем session_token
+        $session_token = bin2hex(random_bytes(32));
+        $user_agent = $_SERVER['HTTP_USER_AGENT'] ?? 'Unknown';
         
-    if($id != -1) $_SESSION['user'] = $id;
+        // Обновляем запись пользователя
+        $update_query = "UPDATE `users` SET 
+                        `session_token` = '".$mysqli->real_escape_string($session_token)."',
+                        `last_activity` = '".$current_time."',
+                        `user_agent` = '".$mysqli->real_escape_string($user_agent)."'
+                        WHERE `id` = $id";
+        
+        $mysqli->query($update_query);
+        
+        // Устанавливаем сессию
+        $_SESSION['user'] = $id;
+        $_SESSION['session_token'] = $session_token;
+    }
+    
     echo $id;
 }
 ?>

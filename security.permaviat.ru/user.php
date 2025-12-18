@@ -5,7 +5,12 @@ include("./check_session.php");
 
 //проверяем активную сессию
 if(!checkActiveSession($mysqli)) {
-    logout($mysqli);
+    // Временно закомментируйте вызов logout
+    // logout($mysqli);
+    
+    // Просто очистите сессию и перенаправьте
+    $_SESSION = array();
+    session_destroy();
     header("Location: login.php");
     exit();
 }

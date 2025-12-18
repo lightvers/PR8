@@ -107,7 +107,8 @@
 										loading.style.display = "none";
 										button.className = "button";
 									} else {
-										location.reload();
+										// Редирект на личный кабинет
+										window.location.href = "user.php";
 										loading.style.display = "none";
 										button.className = "button";
 									}
