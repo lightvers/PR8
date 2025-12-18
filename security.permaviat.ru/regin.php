@@ -40,9 +40,9 @@
 					<div class = "sub-name">Логин:</div>
 					<input name="_login" type="text" placeholder="" onkeypress="return PressToEnter(event)"/>
 					<div class = "sub-name">Пароль:</div>
-					<input name="_password" type="text" placeholder="" onkeypress="return PressToEnter(event)"/>
+					<input name="_password" type="password" placeholder="" onkeypress="return PressToEnter(event)"/>
 					<div class = "sub-name">Повторите пароль:</div>
-					<input name="_passwordCopy" type="text" placeholder="" onkeypress="return PressToEnter(event)"/>
+					<input name="_passwordCopy" type="password" placeholder="" onkeypress="return PressToEnter(event)"/>
 					
 					<a href="login.php">Вернуться</a>
 					<input type="button" class="button" value="Зайти" onclick="RegIn()" style="margin-top: 0px;"/>
@@ -123,7 +123,7 @@
 					}
 
 					function CheckPassword(value){
-						let regex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[\W_])[A-Za-z\d\W_]{8,}$/;
+						let regex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])[A-Za-z0-9]{8,}$/;
 						return regex.test(value);
 					}
 			
